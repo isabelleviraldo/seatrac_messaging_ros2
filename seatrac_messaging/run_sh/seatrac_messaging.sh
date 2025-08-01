@@ -15,5 +15,5 @@ set -u
 
 # Launch the ROS 2 launch file with parameters
 exec ros2 launch seatrac_messaging seatrac_messaging.launch.py \
-  self_beacon_id:="${self_beacon_idS}" \
+  self_beacon_id:="${self_beacon_id}" \
   beacon_destination_id:="${destination_id}"
