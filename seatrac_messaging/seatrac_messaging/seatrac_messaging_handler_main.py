@@ -425,17 +425,17 @@ class SeaTracMessagingHandler(Node):
         beacon_imu_msg.angular_velocity.y = 0.0
         beacon_imu_msg.angular_velocity.z = 0.0
         beacon_imu_msg.angular_velocity_covariance = [
-            -1, 0, 0,
-            0, -1, 0,
-            0, 0, -1,
+            -1.0, 0.0, 0.0,
+            0.0, -1.0, 0.0,
+            0.0, 0.0, -1.0,
         ]
         beacon_imu_msg.linear_acceleration.x = 0.0
         beacon_imu_msg.linear_acceleration.y = 0.0
         beacon_imu_msg.linear_acceleration.z = 0.0
         beacon_imu_msg.linear_acceleration_covariance = [
-            -1, 0, 0,
-            0, -1, 0,
-            0, 0, -1,
+            -1.0, 0.0, 0.0,
+            0.0, -1.0, 0.0,
+            0.0, 0.0, -1.0,
         ]
         # self._beacon_imu_publisher.publish(beacon_imu_msg)
 
