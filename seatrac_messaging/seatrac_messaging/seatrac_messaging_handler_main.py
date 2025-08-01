@@ -409,7 +409,7 @@ class SeaTracMessagingHandler(Node):
 
         # Generate and publish the beacon orientation
         beacon_imu_msg = sensor_msgs.msg.Imu()
-        beacon_imu_msg.header.stamp = self.get_clock().now() 
+        beacon_imu_msg.header.stamp = self.get_clock().now().to_msg()
         beacon_imu_msg.header.frame_id = 'base_link'
         beacon_imu_msg.orientation.x = q_rotation_enu_to_flu[0]
         beacon_imu_msg.orientation.y = q_rotation_enu_to_flu[1]
@@ -440,7 +440,7 @@ class SeaTracMessagingHandler(Node):
         # self._beacon_imu_publisher.publish(beacon_imu_msg)
 
         beacon_depth_msg = geometry_msgs.msg.PoseWithCovarianceStamped()
-        beacon_depth_msg.header.stamp = self.get_clock().now() 
+        beacon_depth_msg.header.stamp = self.get_clock().now().to_msg()
         beacon_depth_msg.header.frame_id = 'map'
         beacon_depth_msg.pose.pose.position.x = 0.0 # (Unpopulated)
         beacon_depth_msg.pose.pose.position.y = 0.0 # (Unpopulated)
