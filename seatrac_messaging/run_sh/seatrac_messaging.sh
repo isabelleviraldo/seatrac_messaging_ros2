@@ -10,7 +10,7 @@ read -rp "Remote SeaTrac ID? " destination_id
 # Source ROS 2 + workspace setup files
 set +u  # allow unset variables during sourcing
 source /opt/ros/humble/setup.bash
-source "$HOME/ros2_ws/install/setup.bash"
+source /ros2_ws/install/setup.bash
 set -u
 
 # Launch the ROS 2 launch file with parameters
