@@ -1,0 +1,5 @@
+uint16 part_number
+uint8 part_revision
+uint32 serial_number
+uint16 system_flags
+uint16 user_flags

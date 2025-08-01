@@ -1,0 +1,13 @@
+bool output_environment
+bool output_attitude
+bool output_mag_cal
+bool output_acc_cal
+bool output_ahrs_raw_data
+bool output_ahrs_comp_data
+uint8 STATUS_MODE_MANUAL=0
+uint8 STATUS_MODE_1HZ=1
+uint8 STATUS_MODE_2HZ5=2
+uint8 STATUS_MODE_5HZ=3
+uint8 STATUS_MODE_10HZ=4
+uint8 STATUS_MODE_25HZ=5
+uint8 status_mode

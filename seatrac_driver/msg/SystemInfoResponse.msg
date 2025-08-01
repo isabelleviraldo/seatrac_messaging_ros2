@@ -1,0 +1,6 @@
+uint32 seconds
+uint8 section
+Hardware hardware
+Firmware boot_firmware
+Firmware main_firmware
+uint8 board_revision

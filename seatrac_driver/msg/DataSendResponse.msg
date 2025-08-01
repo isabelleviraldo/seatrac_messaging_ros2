@@ -1,0 +1,2 @@
+string status
+uint8 beacon_id

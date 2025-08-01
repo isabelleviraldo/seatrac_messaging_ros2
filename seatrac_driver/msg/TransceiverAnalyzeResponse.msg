@@ -1,0 +1,6 @@
+string status
+int16 adc_mean
+uint16 adc_peak_to_peak
+uint32 adc_rms
+float32 rx_level_peak_to_peak
+float32 rx_level_rms

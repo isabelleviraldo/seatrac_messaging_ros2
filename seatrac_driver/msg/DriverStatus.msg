@@ -1,0 +1,10 @@
+bool device_connected
+uint32 sent_command_count
+uint32 parsed_packet_count
+uint32 unhandled_packet_count
+uint32 corrupt_packet_count
+uint32 data_sent
+uint32 data_received
+uint32 ping_sent
+uint32 ping_received
+uint32 ping_error

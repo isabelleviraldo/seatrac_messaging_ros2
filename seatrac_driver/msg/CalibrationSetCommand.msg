@@ -1,0 +1,16 @@
+int16 acc_min_x
+int16 acc_min_y
+int16 acc_min_z
+int16 acc_max_x
+int16 acc_max_y
+int16 acc_max_z
+float32 mag_hard_x
+float32 mag_hard_y
+float32 mag_hard_z
+float32 mag_soft_x
+float32 mag_soft_y
+float32 mag_soft_z
+float32 mag_field
+int16 gyro_offset_x
+int16 gyro_offset_y
+int16 gyro_offset_z

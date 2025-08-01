@@ -1,0 +1,9 @@
+AcousticFix fix
+bool query_depth
+bool query_supply
+bool query_temp
+bool query_attitude
+bool query_data
+uint8 packet_length
+uint8[] packet_data
+bool local_flag

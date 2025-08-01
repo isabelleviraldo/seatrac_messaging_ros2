@@ -1,0 +1,6 @@
+bool output_environment
+bool output_attitude
+bool output_mag_cal
+bool output_acc_cal
+bool output_ahrs_raw_data
+bool output_ahrs_comp_data

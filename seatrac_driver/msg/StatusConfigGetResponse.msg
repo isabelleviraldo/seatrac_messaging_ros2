@@ -1,0 +1,7 @@
+bool environment_outputted
+bool attitude_outputted
+bool mag_cal_outputted
+bool acc_cal_outputted
+bool ahrs_raw_data_outputted
+bool ahrs_comp_data_outputted
+string status_mode

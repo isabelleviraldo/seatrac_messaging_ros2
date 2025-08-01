@@ -1,0 +1,5 @@
+string source_namespace
+uint8  source_asset_id
+int8 source_beacon_id
+builtin_interfaces/Time send_time
+string data

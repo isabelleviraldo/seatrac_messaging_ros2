@@ -1,0 +1,15 @@
+AcousticFix fix
+bool query_depth
+bool query_supply
+bool query_temp
+bool query_attitude
+bool query_data
+float32 remote_depth
+float32 remote_supply
+float32 remote_temp
+float32 remote_yaw
+float32 remote_pitch
+float32 remote_roll
+uint8 packet_length
+uint8[] packet_data
+bool local_flag

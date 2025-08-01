@@ -1,0 +1,24 @@
+uint8 destination_id
+uint8 source_id
+bool range_valid
+bool usbl_valid
+bool position_valid
+bool position_enhanced
+bool position_filter_error
+uint8 msg_type
+float32 attitude_yaw
+float32 attitude_pitch
+float32 attitude_roll
+float32 depth_local
+float32 vos
+float32 rssi
+uint32 range_count
+float32 range_time
+float32 range_dist
+# USBL channel data intentionally omitted for simplicity
+float32 usbl_azimuth
+float32 usbl_elevation
+float32 usbl_fit_error
+float32 position_easting
+float32 position_northing
+float32 position_depth
