@@ -9,11 +9,11 @@ read -rp "Remote SeaTrac ID? " destination_id
 
 # Source ROS 2 + workspace setup files
 set +u  # allow unset variables during sourcing
-source /opt/ros/kilted/setup.bash
-source "$HOME/coding_ws/ros2_package_messaging/install/setup.bash"
+source /opt/ros/humble/setup.bash
+source "$HOME/ros2_ws/install/setup.bash"
 set -u
 
 # Launch the ROS 2 launch file with parameters
 exec ros2 launch seatrac_messaging seatrac_messaging.launch.py \
-  self_beacon_id:="${self_beacon_id}" \
+  self_beacon_id:="${self_beacon_idS}" \
   beacon_destination_id:="${destination_id}"
