@@ -46,11 +46,16 @@ class SeaTracMessagingHandler(Node):
         #reentrant callback group
         self._callback_group = ReentrantCallbackGroup()
 
+        #managing the temporary callback groups within set_settings
         self._temporary_cb_group = ReentrantCallbackGroup()
         self._temporary_msg_buffers = {}
         self._temporary_subs = {}
-        
-        # Most important parameters
+
+        # reduce the number of times that set_settings is called
+        self._last_settings_time = 0  # timestamp of last settings call
+        self._settings_cooldown_sec = 3.0  # minimum delay between calls
+
+        # make sure that it sends to the correct id
         self.declare_parameter('self_beacon_id', 0)
         self._asset_id = self.get_parameter('self_beacon_id').get_parameter_value().integer_value
 
@@ -266,23 +271,26 @@ class SeaTracMessagingHandler(Node):
         return success
 
     def run_sender(self, data):    
-        # Define the process execution rate
         r = self.create_rate(self.rate_hz)
-    
-        # Spin until the beacon is initially connected and we are receiving packets
+
+        # Wait for connection and packet reception
         while (not self._beacon_connected) or (self._beacon_packets_recvd == 0):
             if not rclpy.ok():
                 return
             r.sleep()
-    
-        # Set the initial beacon settings
-        success = self._set_beacon_settings()
-    
-        if not success:
-            self.get_logger().error('Unable to set beacon initial settings. Aborting...')
-            return
-    
+
+        now = time.time()
+        if now - self._last_settings_time > self._settings_cooldown_sec:
+            success = self._set_beacon_settings()
+            if not success:
+                self.get_logger().error('Unable to set beacon settings. Aborting send...')
+                return
+            self._last_settings_time = now
+        else:
+            self.get_logger().info("Skipped settings update (cooldown in effect)")
+
         self.execute(data.data)
+
 
     # Execute is plan that can be loaded
     def execute(self, data):
