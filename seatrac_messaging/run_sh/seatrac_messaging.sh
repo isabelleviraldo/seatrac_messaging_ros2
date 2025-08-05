@@ -13,7 +13,7 @@ export RMW_IMPLEMENTATION=rmw_fastrtps_cpp
 
 # Source ROS 2 + workspace setup files
 set +u  # allow unset variables during sourcing
-source /opt/ros/kilted/setup.bash
+source /opt/ros/foxy/setup.bash
 source /ros2_ws/install/setup.bash
 set -u
 
