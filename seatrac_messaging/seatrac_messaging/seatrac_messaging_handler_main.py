@@ -18,7 +18,6 @@ from threading import Event
 
 #ros messages
 import std_msgs.msg
-from std_msgs.msg import String
 import geometry_msgs.msg
 import sensor_msgs.msg
 import seatrac_driver.msg
@@ -110,16 +109,16 @@ class SeaTracMessagingHandler(Node):
         # interface. These messages are translated from their expanded ROS formats to their
         # packed SeaTrac formats for fleet communication of specific information
 
-        # message to send out subscriber (this can be published to by any code that wants to send a message)
+        # message to send out subscriber (this can be published to by any code that wants to send a message) (also named so it makes more sense for the user)
         self._data_to_send_subscriber = self.create_subscription(std_msgs.msg.String,
-                                                    '/seatrac/data_to_send', 
+                                                    '/seatrac/messaging/send_data', 
                                                     self.run_sender,
                                                     10,
                                                     callback_group=self._callback_group)
 
-        # publish received data to rostopic
-        self._data_recieved_publisher = self.create_publisher(String,
-                                                              '/seatrac/decrypted_data',
+        # publish received data to rostopic (this is named so subscribing to it makes more sense)
+        self._data_recieved_publisher = self.create_publisher(std_msgs.msg.String,
+                                                              '/seatrac/messaging/incoming_data',
                                                               10,
                                                               callback_group=self._callback_group)
         # DATA Command
