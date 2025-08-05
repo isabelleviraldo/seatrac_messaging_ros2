@@ -18,6 +18,7 @@ from threading import Event
 
 #ros messages
 import std_msgs.msg
+from std_msgs.msg import String
 import geometry_msgs.msg
 import sensor_msgs.msg
 import seatrac_driver.msg
@@ -271,7 +272,7 @@ class SeaTracMessagingHandler(Node):
 
     def run_sender(self, data):
         if not self._run_sender_lock.acquire(blocking=False):
-            self.get_logger().warn("run_sender() is already running. Skipping new request.")
+            self.get_logger().warning("run_sender() is already running. Skipping new request.")
             return
 
         try:
