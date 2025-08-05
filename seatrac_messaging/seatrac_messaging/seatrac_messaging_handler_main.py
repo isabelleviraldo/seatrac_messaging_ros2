@@ -51,9 +51,8 @@ class SeaTracMessagingHandler(Node):
         self._temporary_msg_buffers = {}
         self._temporary_subs = {}
 
-        # reduce the number of times that set_settings is called
-        self._last_settings_time = 0  # timestamp of last settings call
-        self._settings_cooldown_sec = 3.0  # minimum delay between calls
+        # make sure only one instance of run is running at a time
+        self._run_sender_lock = threading.Lock()
 
         # make sure that it sends to the correct id
         self.declare_parameter('self_beacon_id', 0)
@@ -270,26 +269,29 @@ class SeaTracMessagingHandler(Node):
 
         return success
 
-    def run_sender(self, data):    
-        r = self.create_rate(self.rate_hz)
+    def run_sender(self, data):
+        if not self._run_sender_lock.acquire(blocking=False):
+            self.get_logger().warn("run_sender() is already running. Skipping new request.")
+            return
 
-        # Wait for connection and packet reception
-        while (not self._beacon_connected) or (self._beacon_packets_recvd == 0):
-            if not rclpy.ok():
-                return
-            r.sleep()
+        try:
+            r = self.create_rate(self.rate_hz)
 
-        now = time.time()
-        if now - self._last_settings_time > self._settings_cooldown_sec:
+            while (not self._beacon_connected) or (self._beacon_packets_recvd == 0):
+                if not rclpy.ok():
+                    return
+                r.sleep()
+
             success = self._set_beacon_settings()
             if not success:
                 self.get_logger().error('Unable to set beacon settings. Aborting send...')
                 return
-            self._last_settings_time = now
-        else:
-            self.get_logger().info("Skipped settings update (cooldown in effect)")
 
-        self.execute(data.data)
+            self.execute(data.data)
+
+        finally:
+            self._run_sender_lock.release()
+
 
 
     # Execute is plan that can be loaded
