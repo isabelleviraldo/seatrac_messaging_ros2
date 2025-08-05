@@ -7,11 +7,19 @@ set -euo pipefail
 read -rp "Local SeaTrac ID? " self_beacon_id
 read -rp "Remote SeaTrac ID? " destination_id
 
+#setup so that it is viewable from wherever
+export ROS_DOMAIN_ID=0
+export RMW_IMPLEMENTATION=rmw_fastrtps_cpp
+
 # Source ROS 2 + workspace setup files
 set +u  # allow unset variables during sourcing
 source /opt/ros/kilted/setup.bash
 source /ros2_ws/install/setup.bash
 set -u
+
+#for some reason ros topics arent exposed unless we do this
+ros2 daemon stop
+ros2 daemon start
 
 # Launch the ROS 2 launch file with parameters
 exec ros2 launch seatrac_messaging seatrac_messaging.launch.py \
