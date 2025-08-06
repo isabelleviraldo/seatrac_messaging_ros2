@@ -77,6 +77,15 @@ class SeaTracMessagingHandler(Node):
         self._node_trigger_range = 10 # Range in meters from threat to node that will cause the node to activate
         self._compass_heading = 0 # Topside node heading. 0 is due north
 
+        # Diagnostics
+        self._skipped_sends = 0
+        self._data_send_start_time = None
+        self._last_receive_time = time.time()
+        self._watchdog_timeout_sec = 10.0
+        
+        # Start watchdog
+        self.create_timer(2.0, self._watchdog_timer_cb)
+        
     def _init_ros_communication(self):
         # The following are ROS message structures either sent or received by the SeaTrac data
         # interface. These messages are translated from their expanded ROS formats to their
