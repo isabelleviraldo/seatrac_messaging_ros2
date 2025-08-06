@@ -77,15 +77,7 @@ class SeaTracMessagingHandler(Node):
         self._node_trigger_range = 10 # Range in meters from threat to node that will cause the node to activate
         self._compass_heading = 0 # Topside node heading. 0 is due north
 
-        # Diagnostics
-        self._skipped_sends = 0
-        self._data_send_start_time = None
-        self._last_receive_time = time.time()
-        self._watchdog_timeout_sec = 10.0
-        
-        # Start watchdog
-        self.create_timer(2.0, self._watchdog_timer_cb)
-        
+
     def _init_ros_communication(self):
         # The following are ROS message structures either sent or received by the SeaTrac data
         # interface. These messages are translated from their expanded ROS formats to their
@@ -535,20 +527,6 @@ class SeaTracMessagingHandler(Node):
                 return last_seen
 
         return None  # no valid message after all attempts
-
-    def _watchdog_timer_cb(self):
-        now = time.time()
-
-        # Watch for stuck send
-        if self._data_in_progress and self._data_send_start_time:
-            if now - self._data_send_start_time > self._watchdog_timeout_sec:
-                self.get_logger().warning("Watchdog: send timed out, resetting _data_in_progress")
-                self._data_in_progress = False
-                self._data_send_start_time = None
-
-        # Optionally, show periodic system state
-        self.get_logger().info(f"[Watchdog] connected={self._beacon_connected}, in_progress={self._data_in_progress}, skipped={self._skipped_sends}")
-
 
 def main(args=None):
     rclpy.init(args=args)
