@@ -272,8 +272,11 @@ class SeaTracMessagingHandler(Node):
 
     def run_sender(self, data):
         if not self._run_sender_lock.acquire(blocking=False):
-            self.get_logger().warning("run_sender() is already running. Skipping new request.")
+            self._skipped_sends += 1
+            self.get_logger().warning(f"run_sender() already running, skipping send. Total skipped: {self._skipped_sends}")
             return
+
+        self.get_logger().info("Starting run_sender")
 
         try:
             r = self.create_rate(self.rate_hz)
@@ -288,12 +291,13 @@ class SeaTracMessagingHandler(Node):
                 self.get_logger().error('Unable to set beacon settings. Aborting send...')
                 return
 
+            # Track time for watchdog
+            self._data_send_start_time = time.time()
+
             self.execute(data.data)
 
         finally:
             self._run_sender_lock.release()
-
-
 
     # Execute is plan that can be loaded
     def execute(self, data):
@@ -484,6 +488,14 @@ class SeaTracMessagingHandler(Node):
         decrypted_msg.data = decrypted_data
         self._data_recieved_publisher.publish(decrypted_msg) # HERE IS THE UNENCRYPTED DATA, publishing it
 
+        self._data_in_progress = False
+        self._data_send_start_time = None
+        self._last_receive_time = time.time()
+        self.get_logger().info("Data received and processed. Resetting _data_in_progress.")
+        
+
+
+
     def wait_for_message(self, topic, msg_type, timeout_sec=1.0, max_attempts=5):
         if topic not in self._temporary_subs:
             self._temporary_msg_buffers[topic] = None
@@ -514,6 +526,19 @@ class SeaTracMessagingHandler(Node):
                 return last_seen
 
         return None  # no valid message after all attempts
+
+    def _watchdog_timer_cb(self):
+        now = time.time()
+
+        # Watch for stuck send
+        if self._data_in_progress and self._data_send_start_time:
+            if now - self._data_send_start_time > self._watchdog_timeout_sec:
+                self.get_logger().warning("Watchdog: send timed out, resetting _data_in_progress")
+                self._data_in_progress = False
+                self._data_send_start_time = None
+
+        # Optionally, show periodic system state
+        self.get_logger().info(f"[Watchdog] connected={self._beacon_connected}, in_progress={self._data_in_progress}, skipped={self._skipped_sends}")
 
 
 def main(args=None):

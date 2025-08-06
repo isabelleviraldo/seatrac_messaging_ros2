@@ -1357,9 +1357,7 @@ class SeaTracDriver(Node):
 
         return numpy.uint16(crc)
 
-
-if __name__ == '__main__':
-    
+def main(args=None):
     rclpy.init()
     node = SeaTracDriver()
 
@@ -1379,5 +1377,9 @@ if __name__ == '__main__':
     finally:
         node.destroy_node()
         rclpy.shutdown()
+
+if __name__ == '__main__':
+    main()
+
 
 
