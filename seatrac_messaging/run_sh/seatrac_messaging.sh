@@ -9,7 +9,7 @@ read -rp "Remote SeaTrac ID? " destination_id
 
 #setup so that it is viewable from wherever
 export ROS_DOMAIN_ID=0
-export RMW_IMPLEMENTATION=rmw_fastrtps_cpp
+export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
 
 # Source ROS 2 + workspace setup files
 set +u  # allow unset variables during sourcing
