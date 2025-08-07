@@ -10,6 +10,7 @@ read -rp "Remote SeaTrac ID? " destination_id
 #setup so that it is viewable from wherever
 export ROS_DOMAIN_ID=0
 export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
+export CYCLONEDDS_URI="<CycloneDDS><Domain><General><AllowMulticast>false</AllowMulticast><Interfaces><NetworkInterface>lo</NetworkInterface></Interfaces></General></Domain></CycloneDDS>"
 
 # Source ROS 2 + workspace setup files
 set +u  # allow unset variables during sourcing
