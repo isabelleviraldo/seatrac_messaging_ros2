@@ -14,8 +14,8 @@ source /ros2_ws/install/setup.bash
 set -u
 
 #for some reason ros topics arent exposed unless we do this
-ros2 daemon stop
-ros2 daemon start
+#ros2 daemon stop
+#ros2 daemon start
 
 # Launch the ROS 2 launch file with parameters
 exec ros2 launch seatrac_messaging seatrac_messaging.launch.py \
