@@ -484,23 +484,37 @@ class SeaTracMessagingHandler(Node):
 
     # _data_receive_status subscriber
     def _on_data_receive_status(self, data):
-        decrypted_msg = String()
+        try:
+            # Debug: print packet metadata
+            self.get_logger().info(f"Received packet: length={data.packet_length}, raw={data.packet_data}")
 
-        i = 0
-        format_string = ""
-        while i < data.packet_length:
-            format_string += "b"
-            i += 1
-        data_received = list(struct.unpack(format_string, data.packet_data))
+            # Convert List[int] → string (char-by-char)
+            decrypted_input = ''.join(chr(b) for b in data.packet_data)
 
-        decrypted_data = v_decrypt(data.packet_data, _ENCRYPTION_KEY)
-        decrypted_msg.data = decrypted_data
-        self._data_recieved_publisher.publish(decrypted_msg) # HERE IS THE UNENCRYPTED DATA, publishing it
+            # Decrypt the payload using your cipher
+            decrypted_data = v_decrypt(decrypted_input, _ENCRYPTION_KEY)
+            self.get_logger().info(f"Decrypted: {decrypted_data}")
 
-        self._data_in_progress = False
-        self._data_send_start_time = None
-        self._last_receive_time = time.time()
-        self.get_logger().info("Data received and processed. Resetting _data_in_progress.")
+            # Ensure the string is safe to publish via DDS (e.g., no null bytes or invalid UTF-8)
+            safe_data = decrypted_data.encode('utf-8', errors='ignore').decode('utf-8')
+
+            # Publish to /seatrac/messaging/incoming_data
+            decrypted_msg = String()
+            decrypted_msg.data = safe_data
+            self._data_recieved_publisher.publish(decrypted_msg)
+            self.get_logger().info("Published decrypted message")
+
+            # Update internal state
+            self._data_in_progress = False
+            self._data_send_start_time = None
+            self._last_receive_time = time.time()
+
+        except Exception as e:
+            self.get_logger().error(f"[ERROR in _on_data_receive_status] {e}")
+            # Always reset in-progress flag to avoid hangs
+            self._data_in_progress = False
+            self._data_send_start_time = None
+
         
 
 
